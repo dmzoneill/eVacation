@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href='common/css/evacation.css' rel="stylesheet" type='text/css'>
+    <title></title>
+</head>
+<body>
+    <div id='container' style='width:90%'>
+        <div id='content'>
+            <div id='wrapper' style='width:100%'>
+                <div id='main'>
+                    <table>
+                        <tr>
+                            <td>
+                                Use these queries to create new ones.<br>
+                                Also use the <a href="DBScripts/evacation%20tables.jpg" target="_blank">tables description</a> and the <a href="DBScripts/evacation%20views.jpg" target="_blank">views description</a>.
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <br>
+                                            <table>
+                                                <tr>
+                                                    <td>
+                                                        <a name="Home Page"></a><div class='th'>Query: Add a new leave type</div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table>
+                                                            <tr>
+                                                                <td><b>Description:</b> add a new leave type (other leave)<br>
+                                                                <b>Comment:</b> the leave type name must not be longer than 30 characters.<br>
+                                                                <br>
+                                                                <b>INSERT INTO</b> tblLeaveType<br>
+                                                                <b>VALUES</b> ('New Leave Name',1,1,0,0.5,0,0,0,1)<br></td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <table>
+                                                <tr>
+                                                    <td>
+                                                        <a name="Home Page"></a><div class='th'>Query:  Add a new bank holiday</div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table>
+                                                            <tr>
+                                                                <td><b>Description:</b> insert an entry in the database.<br>
+                                                                <b>Comment:</b> need to do that for each date but several INSERT INTO are allowed in the same query<br>
+                                                                <br>
+                                                                <b>INSERT INTO</b> tblPublicHoliday<br>
+                                                                <b>VALUES</b> ('2012-10-08','Name of the bank holiday')<br></td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <table>
+                                                <tr>
+                                                    <td>
+                                                        <a name="Home Page0"></a><div class='th'>Query: Delete a specific entry</div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table>
+                                                            <tr>
+                                                                <td><b>Description:</b> Delete good Friday in 2006 and 2007<br>
+                                                                <br>
+                                                                <b>DELETE FROM</b> tblPublicHoliday<br>
+                                                                <b>WHERE</b> datDate=<i>'2006-04-14'</i><br>
+                                                                <b>OR</b> datDate= <i>'2007-04-06'</i><br></td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <table>
+                                                <tr>
+                                                    <td>
+                                                        <a name="Home Page"></a><div class='th'>Query: Update basic entitlement</div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table>
+                                                            <tr>
+                                                                <td><b>Description:</b> Update to 23 the basic entitlement received by all employees each year<br>
+                                                                <br>
+                                                                <b>UPDATE</b> tblLeaveType<br>
+                                                                <b>SET</b> dblEntitlement = 23<br>
+                                                                <b>WHERE</b> <i>'Annual Leave'</i>=strLeaveTypeName<br></td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <table>
+                                                <tr>
+                                                    <td>
+                                                        <a name="Home Page"></a><div class='th'>Query: Delete the content of a table</div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table>
+                                                            <tr>
+                                                                <td><b>Description:</b>Delete all entries of the WDS copy table<br>
+                                                                <br>
+                                                                <b>DELETE FROM</b> dbo.WorkerPrivate<br></td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <table>
+                                                <tr>
+                                                    <td>
+                                                        <a name="Home Page"></a><div class='th'>Query: List administrators</div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table>
+                                                            <tr>
+                                                                <td><b>Description:</b> Display evacation administrators<br>
+                                                                <br>
+                                                                <b>SELECT</b> wp.LastNm,wp.FirstNm, wp.WWID<br>
+                                                                <b>FROM</b> dbo.qryWorkerPrivateAll wp , dbo.tblUser u<br>
+                                                                <b>WHERE</b> wp.WWID = u.strWWID<br>
+                                                                <b>AND</b> blnIsAdmin = 1<br></td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <table>
+                                                <tr>
+                                                    <td>
+                                                        <a name="Home Page"></a><div class='th'>Query: List tracked people</div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table>
+                                                            <tr>
+                                                                <td><b>Description:</b> Display people tracked in evacation<br>
+                                                                <br>
+                                                                <b>SELECT</b> wp.LastNm,wp.FirstNm, wp.WWID<br>
+                                                                <b>FROM</b> dbo.qryWorkerPrivateAll wp , dbo.tblUser u<br>
+                                                                <b>WHERE</b> wp.WWID = u.strWWID<br>
+                                                                <b>AND</b> blnIsEELeaveTracked = 1<br></td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <table>
+                                                <tr>
+                                                    <td>
+                                                        <a name="Home Page"></a><div class='th'>Query:  Display a table</div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table>
+                                                            <tr>
+                                                                <td><b>Description:</b> Display all registered users, tracked or not<br>
+                                                                <br>
+                                                                <b>SELECT</b> *<br>
+                                                                <b>FROM</b> tblUser<br></td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <table>
+                                                <tr>
+                                                    <td>
+                                                        <a name="Home Page"></a><div class='th'>Query: Describe a table</div> 
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table>
+                                                            <tr>
+                                                                <td><b>Description:</b> Describe the WDS copy table<br>
+                                                                <br>
+                                                                <b>SELECT</b> *<br>
+                                                                <b>FROM</b> information_schema.columns<br>
+                                                                <b>WHERE</b> table_name = '<i>WorkerPrivate</i>'<br></td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <table>
+                                                <tr>
+                                                    <td>
+                                                        <a name="Home Page"></a><div class='th'>Query: Modify a table</div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table>
+                                                            <tr>
+                                                                <td><b>Description:</b> Add end of contract date the 28th August 2006<br>
+                                                                <br>
+                                                                <b>UPDATE</b> WorkerPrivate<br>
+                                                                <b>SET</b> EndDt = '<i>20060828</i>'<br>
+                                                                <b>WHERE</b> WWID='<i>10714570</i>'<br>
+                                                                <br></td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <table>
+                                                <tr>
+                                                    <td>
+                                                        <a name="Home Page"></a><div class='th'>Query: Add a field in a table</div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table>
+                                                            <tr>
+                                                                <td><b>Description:</b> Add the field to store the end of contract date in the table tblUser.<br>
+                                                                <b>Comment:</b>&nbsp; If a view or a table is modified, all depending views will have to be re-create. Please also modify the file <i>createobject.sql</i>, it will be needed if the database is reloaded<br>
+                                                                <br>
+                                                                <b>ALTER TABLE</b> tblUser<br>
+                                                                <b>ADD</b> endDate datetime<br></td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <table>
+                                                <tr>
+                                                    <td>
+                                                        <a name="Home Page"></a><div class='th'>Query: Display everybody</div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table>
+                                                            <tr>
+                                                                <td><b>Description:</b> Disable all users except administrators. Usefull if making critical updates.<br>
+                                                                <b>Comment:</b> The problem is to re-enable after, put this value to 1 will enable people which were not enabled before.<br>
+                                                                <br>
+                                                                <b>UPDATE</b> tblUser<br>
+                                                                <b>SET</b> blnIsEELeaveTracked = 0<br></td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <table>
+                                                <tr>
+                                                    <td>
+                                                        <a name="Home Page"></a><div class='th'>Update procedure/view</div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table>
+                                                            <tr>
+                                                                <td><b>Description:</b> To update a procedure or a view, the administrator must delete it and re-create. The 2 SQL statements can be put in the same query.<br>
+                                                                <b>Comment:</b> If a view or a table is modified, all depending views will have to be re-create. Don't forget to update <i>createobject.sql</i> as it is needed to recreate the database.<br>
+                                                                <br>
+                                                                <b>DROP PROCEDURE</b> dbo.pr_evc_elp_data_for_employee<br>
+                                                                <br>
+                                                                <b>CREATE PROCEDURE</b> dbo.pr_evc_elp_data_for_employee(@vWWID AS CHAR(8))<br>
+                                                                <b>AS<br>
+                                                                SET NOCOUNT ON<br>
+                                                                SELECT</b> datActivated, dblInitialDaysBanked, dblTargetDays,lngID<br>
+                                                                <b>FROM</b> dbo.tblELPInstance<br>
+                                                                <b>WHERE</b> strEEWWID = @vWWID<br>
+                                                                <b>RETURN</b><br></td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <br>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

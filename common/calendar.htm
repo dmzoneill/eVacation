@@ -1,0 +1,561 @@
+<HTML>
+<HEAD>
+  <TITLE>Calendar</TITLE>
+	<link rel='stylesheet' type='text/css' href='common/css/popup.css'>
+
+	<SCRIPT LANGUAGE="JavaScript">
+
+		//*** SET UP GLOBAL VARIABLES ***
+		var datToday = new Date();
+		var lngDay = datToday.getDate();
+		var lngYear = datToday.getFullYear();
+		var lngMonth = datToday.getMonth();
+		var lngFocusDay;
+		var lngSelectedMonth = 0;
+		var strDateField;
+		var strDatePassed;
+		var strDateCompareField;
+		var datFirstAllowed;
+		var lngCurrentYear;
+		
+		//*** INITIALISE ***
+		function mInitialise()
+		{
+			strDateField = opener.dateField;
+			strDatePassed = opener.dateFieldVal;
+			datFirstAllowed = opener.dateMinimum;
+			strDateCompareField = opener.dateCompareField;
+			
+			//Check to see if First Allowed date (passed in) is valid, if not set to today.
+			if (mIsValidDate(datFirstAllowed))
+			{
+				datFirstAllowed = new Date(datFirstAllowed);
+			}
+			else
+			{
+				datFirstAllowed = new Date('1 Jan 1901');
+			}
+
+		    //If a valid date was passed in, validate it.
+		    if (mIsValidDate(strDatePassed))
+		    {
+		    	strDatePassed = new Date(strDatePassed);
+		    	if (strDatePassed < datFirstAllowed)
+		    	{
+		    		strDatePassed = datFirstAllowed;
+		    	}
+		    }
+		    else
+		    {
+		    	strDatePassed = datToday;
+		    }
+
+			//If we have a field to compare to and the date already in the field is today's, set it to the compare to date.
+			if ((!strDateCompareField == '') && (mIsValidDate(strDateCompareField)) && (strDatePassed == datToday))
+			{
+				strDateCompareField = new Date(strDateCompareField);
+				strDatePassed = strDateCompareField;
+			}
+				
+			//Extract the day, month and year from the date we are starting with.
+			lngDay   = strDatePassed.getDate();
+			lngMonth = strDatePassed.getMonth();
+			lngYear = strDatePassed.getFullYear();
+			
+			//Update the displayed values.
+		 	document.frmCalendarControl.cboMonth.selectedIndex = lngMonth;
+		    document.frmCalendarControl.txtYear.value          = lngYear;
+			lngFocusDay = lngDay;
+
+			//Re-draw the calendar.		    
+		    mDisplayCalendar(lngDay, lngMonth, lngYear);
+
+		}
+
+
+		//*** DISPLAY CALENDAR ***
+		function mDisplayCalendar(loclngDay, loclngMonth, loclngYear)
+		{
+			lngSelectedMonth = document.frmCalendarControl.cboMonth.selectedIndex;
+			var i   = 0;
+		    var loclngDaysToDisplay = mGetDaysInMonth(loclngMonth+1,loclngYear);
+		    var loclngFirstDayOfMonth = new Date (loclngYear, loclngMonth, 1);
+		    var loclngStartingPos = loclngFirstDayOfMonth.getDay();
+		    loclngDaysToDisplay += loclngStartingPos;
+
+		
+		    // Set first cells to blank (those which are not days in this month)
+		    for (i = 0; i < loclngStartingPos; i++) {
+		        document.links[i].innerText = " ";
+		    }
+		
+		    // Set values for days of the month
+		    for (i = loclngStartingPos; i < loclngDaysToDisplay; i++)  
+		    {
+		        document.links[i].innerText = i - loclngStartingPos + 1;
+		    }
+		
+		    // Set remaining cells blank
+		    for (i=loclngDaysToDisplay; i<42; i++)  {
+		        document.links[i].innerText = " ";
+		    }
+		
+		    // Set focus to correct day.
+			document.links[lngFocusDay + loclngStartingPos - 1].focus();
+		}
+
+
+		//*** SET PREVIOUS MONTH ***
+		function mSetPreviousMonth()
+		{
+		    var loclngYear = document.frmCalendarControl.txtYear.value;
+			var loclngMonth = document.frmCalendarControl.cboMonth.selectedIndex;
+			var loclngDay = 1;
+			
+			if (loclngMonth == 0)
+			{
+				loclngMonth = 11;
+				loclngYear--;
+			}
+			else
+			{
+				loclngMonth--;
+			}
+			var locdatDate = new Date(loclngYear, loclngMonth, loclngDay);
+			if (locdatDate < datFirstAllowed)
+			{
+				alert('You can not select a date prior to ' + mGetFormattedDate(datFirstAllowed) + '.');
+				return;
+			}
+			document.frmCalendarControl.txtYear.value = loclngYear;
+			document.frmCalendarControl.cboMonth.selectedIndex = loclngMonth;
+			mDisplayCalendar(loclngDay, loclngMonth, loclngYear);
+		}
+		
+
+		//*** SET NEXT MONTH ***
+		function mSetNextMonth()
+		{
+		    var loclngYear = document.frmCalendarControl.txtYear.value;
+			var loclngMonth = document.frmCalendarControl.cboMonth.selectedIndex;
+			var loclngDay = 1;
+			
+			if (loclngMonth == 11)
+			{
+				loclngMonth = 0;
+				loclngYear++;
+			}
+			else
+			{
+				loclngMonth++;
+			}
+			var locdatDate = new Date(loclngYear, loclngMonth, loclngDay);
+			if (locdatDate < datFirstAllowed)
+			{
+				alert('You can not select a date prior to ' + mGetFormattedDate(datFirstAllowed) + '.');
+				return;
+			}
+			document.frmCalendarControl.txtYear.value = loclngYear;
+			document.frmCalendarControl.cboMonth.selectedIndex = loclngMonth;
+			mDisplayCalendar(loclngDay, loclngMonth, loclngYear);
+		}
+
+
+
+		//*** SET PREVIOUS YEAR ***
+		function mSetPreviousYear()
+		{
+		    var loclngYear = document.frmCalendarControl.txtYear.value;
+			var loclngMonth = document.frmCalendarControl.cboMonth.selectedIndex;
+			var loclngDay = 1;
+			
+			loclngYear--;
+			var locdatDate = new Date(loclngYear, loclngMonth, loclngDay);
+			if (locdatDate < datFirstAllowed)
+			{
+				alert('You can not select a date prior to ' + mGetFormattedDate(datFirstAllowed) + '.');
+				return;
+			}
+			document.frmCalendarControl.txtYear.value = loclngYear;
+			document.frmCalendarControl.cboMonth.selectedIndex = loclngMonth;
+			mDisplayCalendar(loclngDay, loclngMonth, loclngYear);
+		}
+		
+
+		//*** CAPTURE YEAR ***
+		function mCaptureYear(loclngYear)
+		{
+			if ((loclngYear.length == 4) && (loclngYear > 1900) && (loclngYear < 2099))	
+			{
+				lngCurrentYear=loclngYear;
+			}
+		}
+		
+
+		//*** SET YEAR ***
+		function mSetYear()
+		{
+			var loclngYear = document.frmCalendarControl.txtYear.value;
+			var loclngMonth = document.frmCalendarControl.cboMonth.selectedIndex;
+			var loclngDay = 1;
+			
+			if (loclngYear.length != 4)
+			{
+				alert('Please enter a 4-digit year.');
+				document.frmCalendarControl.txtYear.value = lngCurrentYear;
+				return;
+			}
+			loclngYear = parseInt(loclngYear);
+			if ((loclngYear < 1900) | (loclngYear > 2099))
+			{
+				alert('The year entered is invalid.');
+				document.frmCalendarControl.txtYear.value = lngCurrentYear;
+				return;
+			}
+			var locdatDate = new Date(loclngYear, loclngMonth, loclngDay);
+			if (locdatDate < datFirstAllowed)
+			{
+				alert('You can not select a date prior to ' + mGetFormattedDate(datFirstAllowed) + '.');
+				document.frmCalendarControl.txtYear.value = lngCurrentYear;
+				return;
+			}
+			document.frmCalendarControl.txtYear.value = loclngYear;
+			lngYear = loclngYear;
+			mDisplayCalendar(loclngDay, loclngMonth, loclngYear);
+		}
+
+
+		//*** SET NEXT YEAR ***
+		function mSetNextYear()
+		{
+		    var loclngYear = document.frmCalendarControl.txtYear.value;
+			var loclngMonth = document.frmCalendarControl.cboMonth.selectedIndex;
+			var loclngDay = 1;
+			
+			loclngYear++;
+			var locdatDate = new Date(loclngYear, loclngMonth, loclngDay);
+			if (locdatDate < datFirstAllowed)
+			{
+				alert('You can not select a date prior to ' + mGetFormattedDate(datFirstAllowed) + '.');
+				return;
+			}
+			document.frmCalendarControl.txtYear.value = loclngYear;
+			document.frmCalendarControl.cboMonth.selectedIndex = loclngMonth;
+			mDisplayCalendar(loclngDay, loclngMonth, loclngYear);
+		}
+
+
+		//*** SET TODAY ***
+		function mSetToday()
+		{
+			loclngDay = datToday.getDate();
+			loclngYear = datToday.getFullYear();
+			loclngMonth = datToday.getMonth();
+
+			lngFocusDay = loclngDay;
+			document.frmCalendarControl.txtYear.value = loclngYear;
+			document.frmCalendarControl.cboMonth.selectedIndex = loclngMonth;
+			mDisplayCalendar(loclngDay, loclngMonth, loclngYear);
+		}
+		
+
+		//*** SELECT MONTH ***
+		function mSelectMonth()
+		{
+			lngFocusDay = lngDay;
+			document.frmCalendarControl.txtYear.value = lngYear;
+			var loclngMonth = document.frmCalendarControl.cboMonth.selectedIndex;
+			mDisplayCalendar(lngDay, loclngMonth, lngYear);
+		}
+		
+		
+		//*** RETURN DATE ***
+		function mReturnDate(loclngDay)
+		{
+		    var loclngYear = document.frmCalendarControl.txtYear.value;
+			var loclngMonth = document.frmCalendarControl.cboMonth.selectedIndex;
+			var locdatDate = new Date(loclngYear, loclngMonth, loclngDay);
+			if (locdatDate < datFirstAllowed)
+			{
+				alert('You can not select a date prior to ' + mGetFormattedDate(datFirstAllowed) + '.');
+				return;
+			}
+			strDateField.value = mGetFormattedDate(locdatDate);
+			window.close();
+		}
+		
+		
+		//*** GET DAYS IN MONTH ***
+		function mGetDaysInMonth(loclngMonth,loclngYear)
+		{
+
+			var loclngDays;
+		    if (loclngMonth==1 || loclngMonth==3 || loclngMonth==5 || loclngMonth==7 || loclngMonth==8 ||
+		        loclngMonth==10 || loclngMonth==12)  loclngDays=31;
+		    else if (loclngMonth==4 || loclngMonth==6 || loclngMonth==9 || loclngMonth==11) loclngDays=30;
+		    else if (loclngMonth==2)  {
+		        if (mIsLeapYear(loclngYear))
+		        {
+		            loclngDays=29;
+		        }
+		        else {
+		            loclngDays=28;
+		        }
+		    }
+		    return (loclngDays);
+		}
+
+
+		//*** IS LEAP YEAR ***
+		function mIsLeapYear(Year)
+		{
+			if (((Year % 4)==0) && ((Year % 100)!=0) || ((Year % 400)==0)) {
+				return (true);
+			}
+			else {
+				return (false);
+			}
+		}
+	
+	
+		//**** IS VALID DATE ***
+		function mIsValidDate(strDate)
+		{
+
+			// dd-mmm-yyyy format; leading zeros required
+			var str = new String(strDate);
+			len = str.length;
+
+			if(len == 10) {
+				str = '0' + str;
+			}
+			else
+			{
+				if(len != 11)
+				{
+					return false;
+				}
+			}
+
+			strDay = str.substring(0, 2);
+			strMonthName = str.substring(3, 6).toUpperCase();
+			strYear = str.substring(7, 11);
+			if( isNaN(strDay) || (strDay < 0) || isNaN(strYear) || (strYear < 0))
+			{
+				return false;
+			} 
+			// Ensure valid month and set maximum days for that month...
+			// I wonder if this is Y3K compliant !?
+			if( (strMonthName == "JAN") || (strMonthName == "MAR") || (strMonthName == "MAY") || (strMonthName == "JUL") || (strMonthName == "AUG") || (strMonthName == "OCT") || (strMonthName == "DEC") )
+			{
+				loclngDaysInMonth = 31
+			}
+			else if( (strMonthName == "APR") || (strMonthName == "JUN") || (strMonthName == "SEP") || (strMonthName == "NOV") )
+			{
+				loclngDaysInMonth = 30
+			}
+			else if(strMonthName == "FEB")
+			{ 
+				loclngDaysInMonth = (mIsLeapYear(strYear)) ? 29 : 28;
+			}
+			else
+			{
+				return false;
+			}
+
+			if(strDay > loclngDaysInMonth)
+			{
+				return false;
+			}
+			return true;
+		}
+
+
+		//*** GET FORMATTED DATE ***
+		function mGetFormattedDate(locdatDate)
+		{
+			var strFormattedDate = new String;
+			var strMonth = new String;
+			var loclngMonth = locdatDate.getMonth();
+			
+			switch(loclngMonth)
+			{
+				case 0 :
+					strMonth = 'Jan';
+					break;
+				case 1 :
+					strMonth = 'Feb';
+					break;
+	
+				case 2 :
+					strMonth = 'Mar';
+					break;
+	
+				case 3 :
+					strMonth = 'Apr';
+					break;
+	
+				case 4 :
+					strMonth = 'May';
+					break;
+	
+				case 5 :
+					strMonth = 'Jun';
+					break;
+	
+				case 6 :
+					strMonth = 'Jul';
+					break;
+	
+				case 7 :
+					strMonth = 'Aug';
+					break;
+	
+				case 8 :
+					strMonth = 'Sep';
+					break;
+	
+				case 9 :
+					strMonth = 'Oct';
+					break;
+	
+				case 10 :
+					strMonth = 'Nov';
+					break;
+	
+				case 11 :
+					strMonth = 'Dec';
+					break;
+			}
+			
+			strFormattedDate = locdatDate.getDate() + ' ' + strMonth + ' ' + locdatDate.getFullYear();
+			return strFormattedDate;
+		}
+	
+
+	</SCRIPT>
+</HEAD>
+<body  bgcolor="#FFFFFF" onload="mInitialise()" topmargin="4" bottommargin="1">
+	<table cellpadding=0 cellspacing=0 border=0 style='width:100%'>
+		<form name="frmCalendarControl" onSubmit="return false;">
+			<tr>
+				<td style='text-align:center'>
+					<input type="button" class="btnNormal" button name="previousYear" value="<" border=0 onclick="mSetPreviousMonth()">
+				</td>
+				<td colspan=5 align=center>
+					<select class='basicselect' name="cboMonth" onChange='mSelectMonth()'>
+						<option>January
+						<option>February
+						<option>March
+						<option>April
+						<option>May
+						<option>June
+						<option>July
+						<option>August
+						<option>September
+						<option>October
+						<option>November
+						<option>December
+					</select>
+				</td>
+				<td style='text-align:center'>
+					<input type="button" class="btnNormal" button name="previousYear" value=">" border=0 onclick="mSetNextMonth()">
+				</td>
+			</tr>
+			<tr>
+				<td style='text-align:center'>
+					<input type=button class="btnNormal" name="previousYear" value="<<" onClick="mSetPreviousYear()">
+				</td>
+				<td colspan="5" align=center>
+					<input name="txtYear" type=text SIZE=4 maxlength=4 onFocus="mCaptureYear(this.value);" onChange="mSetYear();">
+				</td>
+				<td style='text-align:center'>
+					<input type=button class="btnNormal" name="previousYear" value=">>" onClick="mSetNextYear()">
+				</td>
+			</tr>
+			<tr>
+				<td colspan="7" align="center">
+					<input type=button name="previousYear" class="btnKey" value="Today" onClick="mSetToday()">
+				</td>
+			</tr>
+			<tr>
+				<td colspan="7" class="tinytext" align="center">
+					Click a date to select.
+				</td>
+			</tr>
+		</form>
+		<tr>
+			<td colspan=7 class="colorcell">
+				<table border=0 cellspacing=1 style='width:100%' align=center>
+					<form name="calbuttons">
+						<tr>
+							<td class=tdHeader>Su</td>
+							<td class=tdHeader>Mo</td>
+							<td class=tdHeader>Tu</td>
+							<td class=tdHeader>We</td>
+							<td class=tdHeader>Th</td>
+							<td class=tdHeader>Fr</td>
+							<td class=tdHeader>Sa</td>
+						</tr>
+						<tr>
+							<td class=tdDay>&nbsp;<a href="#" onClick="mReturnDate(this.innerText)"></a></td>
+							<td class=tdDay>&nbsp;<a href="#" onClick="mReturnDate(this.innerText)"></a></td>
+							<td class=tdDay>&nbsp;<a href="#" onClick="mReturnDate(this.innerText)"></a></td>
+							<td class=tdDay>&nbsp;<a href="#" onClick="mReturnDate(this.innerText)"></a></td>
+							<td class=tdDay>&nbsp;<a href="#" onClick="mReturnDate(this.innerText)"></a></td>
+							<td class=tdDay>&nbsp;<a href="#" onClick="mReturnDate(this.innerText)"></a></td>
+							<td class=tdDay>&nbsp;<a href="#" onClick="mReturnDate(this.innerText)"></a></td>
+						</tr>
+						<tr>
+							<td class=tdDay>&nbsp;<a href="#" onClick="mReturnDate(this.innerText)"></a></td>
+							<td class=tdDay>&nbsp;<a href="#" onClick="mReturnDate(this.innerText)"></a></td>
+							<td class=tdDay>&nbsp;<a href="#" onClick="mReturnDate(this.innerText)"></a></td>
+							<td class=tdDay>&nbsp;<a href="#" onClick="mReturnDate(this.innerText)"></a></td>
+							<td class=tdDay>&nbsp;<a href="#" onClick="mReturnDate(this.innerText)"></a></td>
+							<td class=tdDay>&nbsp;<a href="#" onClick="mReturnDate(this.innerText)"></a></td>
+							<td class=tdDay>&nbsp;<a href="#" onClick="mReturnDate(this.innerText)"></a></td>
+						</tr>
+						<tr>
+							<td class=tdDay>&nbsp;<a href="#" onClick="mReturnDate(this.innerText)"></a></td>
+							<td class=tdDay>&nbsp;<a href="#" onClick="mReturnDate(this.innerText)"></a></td>
+							<td class=tdDay>&nbsp;<a href="#" onClick="mReturnDate(this.innerText)"></a></td>
+							<td class=tdDay>&nbsp;<a href="#" onClick="mReturnDate(this.innerText)"></a></td>
+							<td class=tdDay>&nbsp;<a href="#" onClick="mReturnDate(this.innerText)"></a></td>
+							<td class=tdDay>&nbsp;<a href="#" onClick="mReturnDate(this.innerText)"></a></td>
+							<td class=tdDay>&nbsp;<a href="#" onClick="mReturnDate(this.innerText)"></a></td>
+						</tr>
+						<tr>
+							<td class=tdDay>&nbsp;<a href="#" onClick="mReturnDate(this.innerText)"></a></td>
+							<td class=tdDay>&nbsp;<a href="#" onClick="mReturnDate(this.innerText)"></a></td>
+							<td class=tdDay>&nbsp;<a href="#" onClick="mReturnDate(this.innerText)"></a></td>
+							<td class=tdDay>&nbsp;<a href="#" onClick="mReturnDate(this.innerText)"></a></td>
+							<td class=tdDay>&nbsp;<a href="#" onClick="mReturnDate(this.innerText)"></a></td>
+							<td class=tdDay>&nbsp;<a href="#" onClick="mReturnDate(this.innerText)"></a></td>
+							<td class=tdDay>&nbsp;<a href="#" onClick="mReturnDate(this.innerText)"></a></td>
+						</tr>
+						<tr>
+							<td class=tdDay>&nbsp;<a href="#" onClick="mReturnDate(this.innerText)"></a></td>
+							<td class=tdDay>&nbsp;<a href="#" onClick="mReturnDate(this.innerText)"></a></td>
+							<td class=tdDay>&nbsp;<a href="#" onClick="mReturnDate(this.innerText)"></a></td>
+							<td class=tdDay>&nbsp;<a href="#" onClick="mReturnDate(this.innerText)"></a></td>
+							<td class=tdDay>&nbsp;<a href="#" onClick="mReturnDate(this.innerText)"></a></td>
+							<td class=tdDay>&nbsp;<a href="#" onClick="mReturnDate(this.innerText)"></a></td>
+							<td class=tdDay>&nbsp;<a href="#" onClick="mReturnDate(this.innerText)"></a></td>
+						</tr>
+						<tr>
+							<td class=tdDay>&nbsp;<a href="#" onClick="mReturnDate(this.innerText)"></a></td>
+							<td class=tdDay>&nbsp;<a href="#" onClick="mReturnDate(this.innerText)"></a></td>
+							<td class=tdDay>&nbsp;<a href="#" onClick="mReturnDate(this.innerText)"></a></td>
+							<td class=tdDay>&nbsp;<a href="#" onClick="mReturnDate(this.innerText)"></a></td>
+							<td class=tdDay>&nbsp;<a href="#" onClick="mReturnDate(this.innerText)"></a></td>
+							<td class=tdDay>&nbsp;<a href="#" onClick="mReturnDate(this.innerText)"></a></td>
+							<td class=tdDay>&nbsp;<a href="#" onClick="mReturnDate(this.innerText)"></a></td>
+						</tr>
+					</form>
+				</table>
+			</td>
+		</tr>
+	</table>
+</body>
+
+</HTML>

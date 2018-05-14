@@ -1,0 +1,132 @@
+BODY
+{
+    BACKGROUND-COLOR: #aaaaff;
+}
+
+INPUT
+{
+    FONT-SIZE: 9px;
+}
+
+.btnKey
+{
+    BORDER-BOTTOM: outset thin;
+    BORDER-LEFT: outset thin;
+    BORDER-RIGHT: outset thin;
+    BORDER-TOP: outset thin;
+    TEXT-ALIGN: center;
+    FONT-SIZE: 9px;
+}
+
+.btnNormal
+{
+    BORDER-BOTTOM: outset thin;
+    BORDER-LEFT: outset thin;
+    BORDER-RIGHT: outset thin;
+    BORDER-TOP: outset thin;
+    TEXT-ALIGN: center;
+    HEIGHT: 15px;
+    WIDTH: 16px;
+    FONT-SIZE: 8px;
+}
+
+
+
+.txtNormal
+{
+    BACKGROUND-COLOR: white;
+    BORDER-BOTTOM: white inset thin;
+    BORDER-LEFT: white inset thin;
+    BORDER-RIGHT: white inset thin;
+    BORDER-TOP: white inset thin
+}
+
+.colorcell
+{
+    BACKGROUND-COLOR: #ffffff
+}
+
+.tinytext
+{
+    COLOR: black;
+    FONT-FAMILY: Arial;
+    FONT-SIZE: 10px
+}
+
+.label
+{
+    COLOR: black;
+    FONT-FAMILY: Arial;
+    FONT-SIZE: 12px;
+    FONT-WEIGHT: bolder;
+}
+
+.inactive
+{
+    BACKGROUND-COLOR: #aaaaff;
+    BORDER-BOTTOM: medium none;
+    BORDER-LEFT: medium none;
+    BORDER-RIGHT: medium none;
+    BORDER-TOP: medium none;
+    FONT-FAMILY: Arial;
+    FONT-SIZE: 8pt;
+    TEXT-ALIGN: center;
+}
+
+
+SELECT
+{
+    FONT-FAMILY: Arial;
+    FONT-SIZE: 8pt
+}
+
+A
+{
+    COLOR: black;
+    FONT-FAMILY: Arial;
+    FONT-SIZE: 8pt;
+    TEXT-ALIGN: center;
+    TEXT-DECORATION: none
+}
+
+A:hover
+{
+	COLOR: #FFFFFF;
+}
+
+A:active
+{
+    COLOR: red;
+    FONT-FAMILY: Arial;
+    FONT-SIZE: 8pt;
+    TEXT-DECORATION: none
+}
+
+TD
+{
+    BACKGROUND-COLOR: #aaaaff;
+    FONT-FAMILY: Arial;
+    FONT-SIZE: 8pt;
+}
+
+.tdHeader
+{
+    BACKGROUND-COLOR: #cccccc;
+    FONT-FAMILY: Arial;
+    FONT-SIZE: 8pt;
+    FONT-WEIGHT: bolder;
+	text-align: center;
+}
+
+.tdDay
+{
+	text-align: center;
+}
+
+TABLE
+{
+    BORDER-BOTTOM: medium none;
+    BORDER-LEFT: medium none;
+    BORDER-RIGHT: medium none;
+    BORDER-TOP: medium none
+}
