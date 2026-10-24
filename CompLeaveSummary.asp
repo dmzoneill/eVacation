@@ -17,6 +17,8 @@
 	
 	
 	'**** GRANT COMPENSATORY TIME TO EE ****
+	Dim compTime
+
 	mProcessGrantCompTimeForm
 	
 	'**** GRANT COMPENSATORY TIME TO EE ****
