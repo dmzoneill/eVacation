@@ -721,7 +721,7 @@
                             locdblDays = locdblDays + Item(loclngIndex).LeaveDaysInPeriod(datStart, datEnd)
                         End If
                     Else
-                        '******** CA - Keep for debuggin only *****
+                        '******** CA - Keep for debugging only *****
      '                   Response.Write "obj 510 datStart:" & datStart & ", " & "datEnd:" & datEnd & "<BR>" 'CA Keep for debug
                         '***********
                         locdblDays = locdblDays + Item(loclngIndex).LeaveDaysInPeriod(datStart, datEnd)
@@ -3307,7 +3307,7 @@
             m_strErrorFieldList = ""
             locblnValid = True
 
-            '*** Check to see if the employee alrady has an active ELP instance ***
+            '*** Check to see if the employee already has an active ELP instance ***
             If ELPID = 0 and EE.AnnualVacation.HasActiveELP then
                 locstrErrorMessage = locstrErrorMessage & "  - The employee already has an active ELP.\n"
                 locblnValid = False
@@ -4155,6 +4155,54 @@
             End If
         End Property
         
+        Private Function mCompTimeEmailFooter()
+            Dim locstrHTML
+            locstrHTML = ""
+            locstrHTML = locstrHTML & "<b>Manager:</b>&nbsp;"
+            locstrHTML = locstrHTML & "<a href=""mailto:"
+            locstrHTML = locstrHTML & mHTMLEncode(EE.Manager.Email)
+            locstrHTML = locstrHTML & """ title=""Click here to send an e-mail to "
+            locstrHTML = locstrHTML & mHTMLEncode(EE.Manager.FullName)
+            locstrHTML = locstrHTML & " now."">"
+            locstrHTML = locstrHTML & mHTMLEncode(EE.Manager.FullName)
+            locstrHTML = locstrHTML & "</a>" & vbcrlf
+            locstrHTML = locstrHTML & "</td>" & vbcrlf
+            locstrHTML = locstrHTML & "</tr>" & vbcrlf
+            locstrHTML = locstrHTML & "<tr>" & vbcrlf
+            locstrHTML = locstrHTML & "<td colspan=2>" & vbcrlf
+            locstrHTML = locstrHTML & "<b>Reason:</b><br>" & vbcrlf
+            if trim(Reason) <> "" then
+            locstrHTML = locstrHTML & mHTMLEncode(Reason)
+            else
+            locstrHTML = locstrHTML & "(none)"
+            end if
+            locstrHTML = locstrHTML & "</td>" & vbcrlf
+            locstrHTML = locstrHTML & "</tr>" & vbcrlf
+            locstrHTML = locstrHTML & "<tr>"
+            locstrHTML = locstrHTML & "<td colspan=2>"
+            locstrHTML = locstrHTML & "Please click "
+            locstrHTML = locstrHTML & "<a href='https://" & Request.ServerVariables("http_host")
+            locstrHTML =  locstrHTML & CONST_APPLICATION_PATH & "/requestleave.asp?m=ct&itemid=" & ID & "'>here</a>"
+            locstrHTML = locstrHTML & " to book this leave."
+            locstrHTML = locstrHTML & "</td>"
+            locstrHTML = locstrHTML & "<tr>"
+            locstrHTML = locstrHTML & "</table>" & vbcrlf
+
+            locstrHTML = locstrHTML & "<br>" & vbcrlf
+
+            locstrHTML = locstrHTML & "<table class='pageContentTable'>" & vbcrlf
+            locstrHTML = locstrHTML & "<tr>" & vbcrlf
+            locstrHTML = locstrHTML & "<td>" & vbcrlf
+            locstrHTML = locstrHTML & CONST_APPLICATION_FOOTER & vbcrlf
+            locstrHTML = locstrHTML & "</td>" & vbcrlf
+            locstrHTML = locstrHTML & "</tr>" & vbcrlf
+            locstrHTML = locstrHTML & "</table>" & vbcrlf
+
+            locstrHTML = locstrHTML & "</body>" & vbcrlf
+            locstrHTML = locstrHTML & "</html>" & vbcrlf
+            mCompTimeEmailFooter = locstrHTML
+        End Function
+
         Public Property Get CompTimeEmailBody()
             Dim locstrHTML
             
@@ -4204,48 +4252,7 @@
                         locstrHTML = locstrHTML & "</tr>" & vbcrlf
                         locstrHTML = locstrHTML & "<tr>" & vbcrlf
                             locstrHTML = locstrHTML & "<td colspan='2'>" & vbcrlf
-                                locstrHTML = locstrHTML & "<b>Manager:</b>&nbsp;"
-                                locstrHTML = locstrHTML & "<a href=""mailto:"
-                                locstrHTML = locstrHTML & mHTMLEncode(EE.Manager.Email)
-                                locstrHTML = locstrHTML & """ title=""Click here to send an e-mail to "
-                                locstrHTML = locstrHTML & mHTMLEncode(EE.Manager.FullName)
-                                locstrHTML = locstrHTML & " now."">"
-                                    locstrHTML = locstrHTML & mHTMLEncode(EE.Manager.FullName)
-                                locstrHTML = locstrHTML & "</a>" & vbcrlf
-                            locstrHTML = locstrHTML & "</td>" & vbcrlf
-                        locstrHTML = locstrHTML & "</tr>" & vbcrlf
-                        locstrHTML = locstrHTML & "<tr>" & vbcrlf
-                            locstrHTML = locstrHTML & "<td colspan=2>" & vbcrlf
-                                locstrHTML = locstrHTML & "<b>Reason:</b><br>" & vbcrlf
-                                if trim(Reason) <> "" then
-                                    locstrHTML = locstrHTML & mHTMLEncode(Reason)
-                                else
-                                    locstrHTML = locstrHTML & "(none)"
-                                end if
-                            locstrHTML = locstrHTML & "</td>" & vbcrlf
-                        locstrHTML = locstrHTML & "</tr>" & vbcrlf
-                        locstrHTML = locstrHTML & "<tr>"
-                            locstrHTML = locstrHTML & "<td colspan=2>"
-                                locstrHTML = locstrHTML & "Please click "
-								locstrHTML = locstrHTML & "<a href='https://" & Request.ServerVariables("http_host")
-                            	locstrHTML =  locstrHTML & CONST_APPLICATION_PATH & "/requestleave.asp?m=ct&itemid=" & ID & "'>here</a>"
-                                locstrHTML = locstrHTML & " to book this leave."
-                            locstrHTML = locstrHTML & "</td>"
-                        locstrHTML = locstrHTML & "<tr>"
-                    locstrHTML = locstrHTML & "</table>" & vbcrlf
-
-                    locstrHTML = locstrHTML & "<br>" & vbcrlf
-    
-                    locstrHTML = locstrHTML & "<table class='pageContentTable'>" & vbcrlf
-                        locstrHTML = locstrHTML & "<tr>" & vbcrlf
-                            locstrHTML = locstrHTML & "<td>" & vbcrlf
-                                locstrHTML = locstrHTML & CONST_APPLICATION_FOOTER & vbcrlf
-                            locstrHTML = locstrHTML & "</td>" & vbcrlf
-                        locstrHTML = locstrHTML & "</tr>" & vbcrlf
-                    locstrHTML = locstrHTML & "</table>" & vbcrlf
-
-                locstrHTML = locstrHTML & "</body>" & vbcrlf
-            locstrHTML = locstrHTML & "</html>" & vbcrlf
+                                locstrHTML = locstrHTML & mCompTimeEmailFooter()
             CompTimeEmailBody = locstrHTML
         End Property        
         
@@ -4293,48 +4300,7 @@
                         locstrHTML = locstrHTML & "</tr>" & vbcrlf
                         locstrHTML = locstrHTML & "<tr>" & vbcrlf
                             locstrHTML = locstrHTML & "<td align=left>" & vbcrlf
-                                locstrHTML = locstrHTML & "<b>Manager:</b>&nbsp;"
-                                locstrHTML = locstrHTML & "<a href=""mailto:"
-                                locstrHTML = locstrHTML & mHTMLEncode(EE.Manager.Email)
-                                locstrHTML = locstrHTML & """ title=""Click here to send an e-mail to "
-                                locstrHTML = locstrHTML & mHTMLEncode(EE.Manager.FullName)
-                                locstrHTML = locstrHTML & " now."">"
-                                    locstrHTML = locstrHTML & mHTMLEncode(EE.Manager.FullName)
-                                locstrHTML = locstrHTML & "</a>" & vbcrlf
-                            locstrHTML = locstrHTML & "</td>" & vbcrlf
-                        locstrHTML = locstrHTML & "</tr>" & vbcrlf
-                        locstrHTML = locstrHTML & "<tr>" & vbcrlf
-                            locstrHTML = locstrHTML & "<td colspan=2>" & vbcrlf
-                                locstrHTML = locstrHTML & "<b>Reason:</b><br>" & vbcrlf
-                                if trim(Reason) <> "" then
-                                    locstrHTML = locstrHTML & mHTMLEncode(Reason)
-                                else
-                                    locstrHTML = locstrHTML & "(none)"
-                                end if
-                            locstrHTML = locstrHTML & "</td>" & vbcrlf
-                        locstrHTML = locstrHTML & "</tr>" & vbcrlf
-                        locstrHTML = locstrHTML & "<tr>"
-                            locstrHTML = locstrHTML & "<td colspan=2>"
-                                locstrHTML = locstrHTML & "Please click "
-								locstrHTML = locstrHTML & "<a href='https://" & Request.ServerVariables("http_host")
-                            	locstrHTML =  locstrHTML & CONST_APPLICATION_PATH & "/requestleave.asp?m=ct&itemid=" & ID & "'>here</a>"
-                                locstrHTML = locstrHTML & " to book this leave."
-                            locstrHTML = locstrHTML & "</td>"
-                        locstrHTML = locstrHTML & "<tr>"
-                    locstrHTML = locstrHTML & "</table>" & vbcrlf
-
-                    locstrHTML = locstrHTML & "<br>" & vbcrlf
-    
-                    locstrHTML = locstrHTML & "<table class='pageContentTable'>" & vbcrlf
-                        locstrHTML = locstrHTML & "<tr>" & vbcrlf
-                            locstrHTML = locstrHTML & "<td>" & vbcrlf
-                                locstrHTML = locstrHTML & CONST_APPLICATION_FOOTER & vbcrlf
-                            locstrHTML = locstrHTML & "</td>" & vbcrlf
-                        locstrHTML = locstrHTML & "</tr>" & vbcrlf
-                    locstrHTML = locstrHTML & "</table>" & vbcrlf
-
-                locstrHTML = locstrHTML & "</body>" & vbcrlf
-            locstrHTML = locstrHTML & "</html>" & vbcrlf
+                                locstrHTML = locstrHTML & mCompTimeEmailFooter()
             CompTimeEmailBodyRevoke = locstrHTML
         End Property        
         
@@ -4385,48 +4351,7 @@
                         locstrHTML = locstrHTML & "</tr>" & vbcrlf
                         locstrHTML = locstrHTML & "<tr>" & vbcrlf
                             locstrHTML = locstrHTML & "<td colspan='2'>" & vbcrlf
-                                locstrHTML = locstrHTML & "<b>Manager:</b>&nbsp;"
-                                locstrHTML = locstrHTML & "<a href=""mailto:"
-                                locstrHTML = locstrHTML & mHTMLEncode(EE.Manager.Email)
-                                locstrHTML = locstrHTML & """ title=""Click here to send an e-mail to "
-                                locstrHTML = locstrHTML & mHTMLEncode(EE.Manager.FullName)
-                                locstrHTML = locstrHTML & " now."">"
-                                    locstrHTML = locstrHTML & mHTMLEncode(EE.Manager.FullName)
-                                locstrHTML = locstrHTML & "</a>" & vbcrlf
-                            locstrHTML = locstrHTML & "</td>" & vbcrlf
-                        locstrHTML = locstrHTML & "</tr>" & vbcrlf
-                        locstrHTML = locstrHTML & "<tr>" & vbcrlf
-                            locstrHTML = locstrHTML & "<td colspan=2>" & vbcrlf
-                                locstrHTML = locstrHTML & "<b>Reason:</b><br>" & vbcrlf
-                                if trim(Reason) <> "" then
-                                    locstrHTML = locstrHTML & mHTMLEncode(Reason)
-                                else
-                                    locstrHTML = locstrHTML & "(none)"
-                                end if
-                            locstrHTML = locstrHTML & "</td>" & vbcrlf
-                        locstrHTML = locstrHTML & "</tr>" & vbcrlf
-                        locstrHTML = locstrHTML & "<tr>"
-                            locstrHTML = locstrHTML & "<td colspan=2>"
-                                locstrHTML = locstrHTML & "Please click "
-								locstrHTML = locstrHTML & "<a href='https://" & Request.ServerVariables("http_host")
-                            	locstrHTML =  locstrHTML & CONST_APPLICATION_PATH & "/requestleave.asp?m=ct&itemid=" & ID & "'>here</a>"
-                                locstrHTML = locstrHTML & " to book this leave."
-                            locstrHTML = locstrHTML & "</td>"
-                        locstrHTML = locstrHTML & "<tr>"
-                    locstrHTML = locstrHTML & "</table>" & vbcrlf
-
-                    locstrHTML = locstrHTML & "<br>" & vbcrlf
-    
-                    locstrHTML = locstrHTML & "<table class='pageContentTable'>" & vbcrlf
-                        locstrHTML = locstrHTML & "<tr>" & vbcrlf
-                            locstrHTML = locstrHTML & "<td>" & vbcrlf
-                                locstrHTML = locstrHTML & CONST_APPLICATION_FOOTER & vbcrlf
-                            locstrHTML = locstrHTML & "</td>" & vbcrlf
-                        locstrHTML = locstrHTML & "</tr>" & vbcrlf
-                    locstrHTML = locstrHTML & "</table>" & vbcrlf
-
-                locstrHTML = locstrHTML & "</body>" & vbcrlf
-            locstrHTML = locstrHTML & "</html>" & vbcrlf
+                                locstrHTML = locstrHTML & mCompTimeEmailFooter()
             CompTimeEmailBodyGrant = locstrHTML
         End Property        
         
@@ -5110,7 +5035,7 @@
                 locdatEndDate = EndDate
             End If
             
-            '******** CA - Keep for debuggin only *****
+            '******** CA - Keep for debugging only *****
      '       Response.Write "Obj 4555 CA - Here in cObjLeavePeriod.LeaveDaysInPeriod " & "<BR>"  'CA
      '       Response.Write  "locdatStartDate:"  & locdatStartDate & ", locdatEndDate:" & locdatEndDate &  "<BR>"  'CA
      '       Response.Write  "Type :"  & locLeaveType &  "</BR>"
@@ -5131,7 +5056,7 @@
                 end if
             end if
             
-            '******** CA - Keep for debuggin only *****
+            '******** CA - Keep for debugging only *****
             'Response.Write "locdblDays:" & locdblDays & "<BR>"  'CA
             'Response.Write "glbPublicHolidays:" & glbPublicHolidays.CountInPeriod(locdatStartDate,locdatEndDate,False) & "<BR>"  'CA
             'Response.Write "mCountWeekendDays:" & mCountWeekendDays(locdatStartDate, locdatEndDate) & "<BR>"  'CA
@@ -5220,7 +5145,7 @@
 
 
             Else
-                '*** An approver hasn't been entered - so check wether an approver is required.
+                '*** An approver hasn't been entered - so check whether an approver is required.
                 '*** Is the EE also his or her manager's delegate?
                 If trim(lcase(EE.WWID)) = trim(lcase(EE.Manager.ActiveDelegate.WWID)) then
                     '*** Is the leave request for the current employee
@@ -5708,7 +5633,7 @@
                     locblnValid = False
                 End if
             Else
-                '*** An approver hasn't been entered - so check wether an approver is required.
+                '*** An approver hasn't been entered - so check whether an approver is required.
                 '*** Is the EE also his or her manager's delegate?
                 If trim(lcase(EE.WWID)) = trim(lcase(EE.Manager.ActiveDelegate.WWID)) then
                     '*** Is the leave request for the current employee
@@ -6314,7 +6239,7 @@
             Else
                 
                 ELPEndDate = date() 'Just so the user doesn't see the 'End date must be entered' 
-                            'error which could confue them
+                            'error which could confuse them
             End if
         End Property
 		
@@ -8155,7 +8080,7 @@
                 locstrErrorMessage = locstrErrorMessage & "  - The Delegate WWID is not a valid Intel WWID.\n"
                 m_strErrorFieldList = m_strErrorFieldList & "ActiveDelegate.WWID;"
                 locblnValid = False
-            '*** User tring to appoint him / her self as delegate?              
+            '*** User trying to appoint him / her self as delegate?              
             ElseIf m_strActiveDelegateWWID = WWID then
                 locstrErrorMessage = locstrErrorMessage & "  - You are trying to appoint yourself as your delegate.\n"
                 m_strErrorFieldList = m_strErrorFieldList & "ActiveDelegate.WWID;"
