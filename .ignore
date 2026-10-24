@@ -1,0 +1,5 @@
+# Generated: SQL Server Management Studio "Generate Scripts" output
+# (header "Object: ... Script Date: 4/19/2018"), not hand-written.
+DBScripts/createdatabase.sql
+# Vendored third-party: jQuery UI v1.11.4 minified build (jqueryui.com).
+common/javascript/jquery-ui.min.js
