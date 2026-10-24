@@ -721,7 +721,7 @@
                             locdblDays = locdblDays + Item(loclngIndex).LeaveDaysInPeriod(datStart, datEnd)
                         End If
                     Else
-                        '******** CA - Keep for debuggin only *****
+                        '******** CA - Keep for debugging only *****
      '                   Response.Write "obj 510 datStart:" & datStart & ", " & "datEnd:" & datEnd & "<BR>" 'CA Keep for debug
                         '***********
                         locdblDays = locdblDays + Item(loclngIndex).LeaveDaysInPeriod(datStart, datEnd)
@@ -3307,7 +3307,7 @@
             m_strErrorFieldList = ""
             locblnValid = True
 
-            '*** Check to see if the employee alrady has an active ELP instance ***
+            '*** Check to see if the employee already has an active ELP instance ***
             If ELPID = 0 and EE.AnnualVacation.HasActiveELP then
                 locstrErrorMessage = locstrErrorMessage & "  - The employee already has an active ELP.\n"
                 locblnValid = False
@@ -5035,7 +5035,7 @@
                 locdatEndDate = EndDate
             End If
             
-            '******** CA - Keep for debuggin only *****
+            '******** CA - Keep for debugging only *****
      '       Response.Write "Obj 4555 CA - Here in cObjLeavePeriod.LeaveDaysInPeriod " & "<BR>"  'CA
      '       Response.Write  "locdatStartDate:"  & locdatStartDate & ", locdatEndDate:" & locdatEndDate &  "<BR>"  'CA
      '       Response.Write  "Type :"  & locLeaveType &  "</BR>"
@@ -5056,7 +5056,7 @@
                 end if
             end if
             
-            '******** CA - Keep for debuggin only *****
+            '******** CA - Keep for debugging only *****
             'Response.Write "locdblDays:" & locdblDays & "<BR>"  'CA
             'Response.Write "glbPublicHolidays:" & glbPublicHolidays.CountInPeriod(locdatStartDate,locdatEndDate,False) & "<BR>"  'CA
             'Response.Write "mCountWeekendDays:" & mCountWeekendDays(locdatStartDate, locdatEndDate) & "<BR>"  'CA
@@ -5145,7 +5145,7 @@
 
 
             Else
-                '*** An approver hasn't been entered - so check wether an approver is required.
+                '*** An approver hasn't been entered - so check whether an approver is required.
                 '*** Is the EE also his or her manager's delegate?
                 If trim(lcase(EE.WWID)) = trim(lcase(EE.Manager.ActiveDelegate.WWID)) then
                     '*** Is the leave request for the current employee
@@ -5633,7 +5633,7 @@
                     locblnValid = False
                 End if
             Else
-                '*** An approver hasn't been entered - so check wether an approver is required.
+                '*** An approver hasn't been entered - so check whether an approver is required.
                 '*** Is the EE also his or her manager's delegate?
                 If trim(lcase(EE.WWID)) = trim(lcase(EE.Manager.ActiveDelegate.WWID)) then
                     '*** Is the leave request for the current employee
@@ -6239,7 +6239,7 @@
             Else
                 
                 ELPEndDate = date() 'Just so the user doesn't see the 'End date must be entered' 
-                            'error which could confue them
+                            'error which could confuse them
             End if
         End Property
 		
@@ -8080,7 +8080,7 @@
                 locstrErrorMessage = locstrErrorMessage & "  - The Delegate WWID is not a valid Intel WWID.\n"
                 m_strErrorFieldList = m_strErrorFieldList & "ActiveDelegate.WWID;"
                 locblnValid = False
-            '*** User tring to appoint him / her self as delegate?              
+            '*** User trying to appoint him / her self as delegate?              
             ElseIf m_strActiveDelegateWWID = WWID then
                 locstrErrorMessage = locstrErrorMessage & "  - You are trying to appoint yourself as your delegate.\n"
                 m_strErrorFieldList = m_strErrorFieldList & "ActiveDelegate.WWID;"
