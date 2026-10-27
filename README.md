@@ -1,5 +1,9 @@
 # eVacation
 
+<p align="center">
+  <img src=".github/logo.png" alt="eVacation logo" width="128" />
+</p>
+
 A web application for employee vacation and leave management.
 
 ## What it does
